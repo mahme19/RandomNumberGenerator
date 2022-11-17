@@ -172,7 +172,7 @@ public class Main {
         double sum = 0;
         int counter = 0;
 
-        for (int k = 0 ; k < M ; k++) {
+        for (int k = 0 ; k < M+1 ; k++) {
             int test1 = i+(k*m);
             int test2 = i+(k+1)*m;
             sum += testArray.get(test1)*testArray.get(test2);
@@ -183,16 +183,16 @@ public class Main {
 
         System.out.println("number of loops " + counter);
 
-        double divide = 1.0 /  ((double) M)+1.0;
-        double rho = ((divide) * sum)- 0.25;
+        double divide = 1.0 / (77.11+1.0);
+        double rho = divide * sum - 0.25;
         System.out.println("divide: " +divide);
         System.out.println("sum:"+ sum);
         System.out.println("Rho " + rho);
 
         // Calculate sigma
-        double testsigma1 = Math.sqrt(13*(double) M+7);
-        double testsigma2 =  12* ((double) M+1);
-        double sigma = testsigma1/ testsigma2;
+        double testsigma1 = Math.sqrt(13* 77.11+7);
+        double testsigma2 =  12 * (77.11+1);
+        double sigma = testsigma1 / testsigma2;
         System.out.println("sigma " + sigma);
 
         // Test statistic (Z_0)
