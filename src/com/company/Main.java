@@ -14,21 +14,27 @@ public class Main {
         double c1 = 321;
         double m1 = Math.pow(2,16);
 
-
         double seed = 123456789;
-
 
         double a2 = 65539;
         double c2 = 0;
         double m2 = Math.pow(2,31);
 
+        System.out.println(" ______  RAND Library  ______ ");
+
+        ArrayList<Double> generatedNumbers = randomNumber();
+
+        System.out.println("Autocorrelation Test: " + autoCorrelationTest(generatedNumbers));
+        System.out.println("Kolmogorov-Smirnov Test: " + KS_test(generatedNumbers));
+        System.out.println("Chi-Square Test: " + chiSquare(generatedNumbers));
+        System.out.println("Runs Test: " + runTest(generatedNumbers));
 
         System.out.println(" ______  1st LCG Setting  ______ ");
 
         ArrayList<Double> generatedNumbers1 = generateNumbers(a1, c1, m1, seed);
 
         System.out.println("Autocorrelation Test: " + autoCorrelationTest(generatedNumbers1));
-        //System.out.println("Kolmogorov-Smirnov Test: " + KS_test(generatedNumbers1));
+        System.out.println("Kolmogorov-Smirnov Test: " + KS_test(generatedNumbers1));
         System.out.println("Chi-Square Test: " + chiSquare(generatedNumbers1));
         System.out.println("Runs Test: " + runTest(generatedNumbers1));
 
@@ -38,12 +44,21 @@ public class Main {
         ArrayList<Double> generatedNumbers2 = generateNumbers(a2, c2, m2, seed);
 
         System.out.println("Autocorrelation Test: " + autoCorrelationTest(generatedNumbers2));
-        //System.out.println("Kolmogorov-Smirnov Test: " + KS_test(generatedNumbers2));
+        System.out.println("Kolmogorov-Smirnov Test: " + KS_test(generatedNumbers2));
         System.out.println("Chi-Square Test: " +chiSquare(generatedNumbers2));
         System.out.println("Runs Test: " +runTest(generatedNumbers2));
 
     }
 
+    public static ArrayList<Double> randomNumber(){
+        ArrayList<Double> finalList = new ArrayList<>();
+        Random random = new Random();
+
+        for (int i = 0; i < 10000 ; i++) {
+            finalList.add(random.nextDouble());
+        }
+        return finalList;
+    }
 
     public static ArrayList<Double> generateNumbers(double a , double c , double m, double seed){
         ArrayList<Double> listOfSeeds = new ArrayList<>();
@@ -95,7 +110,7 @@ public class Main {
         }
     }
 
-    public static void KS_test(ArrayList<Double> numbers){
+    public static String KS_test(ArrayList<Double> numbers){
         double dPlus;
         double dMinus;
         ArrayList<Double> D_plus = new ArrayList<>();
@@ -124,13 +139,15 @@ public class Main {
         dMinus = Collections.max(D_minus);
         dPlus = Collections.max(D_plus);
 
-        System.out.println("D minus:" + dMinus);
-        System.out.println("D plus: "+ dPlus);
-
         double val = Math.max(dPlus, dMinus);
-        System.out.println("D: "+val);
 
+        double dAlpha = 1.36 / Math.sqrt(newArray.size());
 
+        if(dAlpha >= val){
+            return "H0 Not Rejected";
+        } else {
+            return "H0 Rejected";
+        }
     }
 
     public static String autoCorrelationTest(ArrayList<Double> testArray) {
