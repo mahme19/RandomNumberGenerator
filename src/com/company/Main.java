@@ -10,49 +10,41 @@ public class Main {
 
     public static void main(String[] args) {
 
-        double a = 101427;
-        double c = 321;
-        double m = Math.pow(2,16);
+        double a1 = 101427;
+        double c1 = 321;
+        double m1 = Math.pow(2,16);
 
 
         double seed = 123456789;
 
 
-        double a1 = 65539;
-        double c1 = 0;
-        double m1 = Math.pow(2,31);
+        double a2 = 65539;
+        double c2 = 0;
+        double m2 = Math.pow(2,31);
 
 
-        System.out.println("1st LCG Setting");
+        System.out.println(" ______  1st LCG Setting  ______ ");
 
-        ArrayList<Double> generatedNumbers =  generateNumbers(a,c,m,seed);
-        //chiSquare(generatedNumbers);
-       // KS_test(generatedNumbers);
-        autoCorrelationTest(generatedNumbers);
+        ArrayList<Double> generatedNumbers1 = generateNumbers(a1, c1, m1, seed);
 
-        //System.out.println("2ND LCG setting");
-
-        //ArrayList<Double> generatedNumbers1 = generateNumbers(a1, c1, m1, seed);
-        //KS_test(generatedNumbers1);
+        System.out.println("Autocorrelation Test: " + autoCorrelationTest(generatedNumbers1));
+        //System.out.println("Kolmogorov-Smirnov Test: " + KS_test(generatedNumbers1));
+        System.out.println("Chi-Square Test: " + chiSquare(generatedNumbers1));
+        System.out.println("Runs Test: " + runTest(generatedNumbers1));
 
 
-        //System.out.println("Java Random Library");
-        //ArrayList<Double> randomGeneratedNumbers = randomNumber();
+        System.out.println(" ______  2nd LCG Setting  ______ ");
 
-        //KS_test(randomGeneratedNumbers);
+        ArrayList<Double> generatedNumbers2 = generateNumbers(a2, c2, m2, seed);
+
+        System.out.println("Autocorrelation Test: " + autoCorrelationTest(generatedNumbers2));
+        //System.out.println("Kolmogorov-Smirnov Test: " + KS_test(generatedNumbers2));
+        System.out.println("Chi-Square Test: " +chiSquare(generatedNumbers2));
+        System.out.println("Runs Test: " +runTest(generatedNumbers2));
 
     }
 
 
-    public static ArrayList<Double> randomNumber(){
-        ArrayList<Double> finalList = new ArrayList<>();
-        Random random = new Random();
-
-        for (int i = 0; i < 10000 ; i++) {
-            finalList.add(random.nextDouble());
-        }
-        return finalList;
-    }
     public static ArrayList<Double> generateNumbers(double a , double c , double m, double seed){
         ArrayList<Double> listOfSeeds = new ArrayList<>();
         double newSeed;
@@ -68,9 +60,8 @@ public class Main {
         return listOfSeeds;
     }
 
-    public static void chiSquare(ArrayList numbers) {
+    public static String chiSquare(ArrayList numbers) {
         int occurences[] = new int[10];
-        System.out.println(numbers.size());
         for(int i = 0 ; i < numbers.size() ; i++) {
 
             //System.out.println("We get the number : " + string);
@@ -88,8 +79,6 @@ public class Main {
             else if (number >= 0.1) { occurences[1]++; }
             else if (number >= 0) { occurences[0]++; }
         }
-        System.out.println("--- OCURRENCES ---");
-        System.out.println(Arrays.toString(occurences));
 
         double chiSquareTotal = 0;
 
@@ -97,24 +86,13 @@ public class Main {
             double expectedQuantity = numbers.size()/10;
 
             chiSquareTotal = chiSquareTotal + Math.pow(occurences[i]-(expectedQuantity),2)/(expectedQuantity);
-            System.out.println("Chi under : " + chiSquareTotal);
         }
 
-        System.out.println("chi TOTAL : " + chiSquareTotal);
         if (chiSquareTotal > 16.92) {
-            System.out.println("H0 Rejected");
+            return "H0 Rejected";
         } else {
-            System.out.println("H0 NOT Rejected");
+            return "H0 NOT Rejected";
         }
-    }
-
-    public static void autoCorrelation(){
-        double m;
-        int i;
-        int N;
-        double M;
-
-        double rho;
     }
 
     public static void KS_test(ArrayList<Double> numbers){
@@ -125,14 +103,11 @@ public class Main {
 
         ArrayList<Double> newArray = new ArrayList<>();
 
-
         for(int i = 0; i<100; i++){
             newArray.add(numbers.get(i));
         }
 
-
         Collections.sort(newArray);
-
 
         for(int i = 1; i < newArray.size()+1; i++){
             int size = newArray.size();
@@ -146,10 +121,6 @@ public class Main {
            D_plus.add(ddPlus);
         }
 
-
-
-
-
         dMinus = Collections.max(D_minus);
         dPlus = Collections.max(D_plus);
 
@@ -161,44 +132,38 @@ public class Main {
 
 
     }
-    public static void autoCorrelationTest(ArrayList<Double> testArray) {
-        System.out.println("we started");
+
+    public static String autoCorrelationTest(ArrayList<Double> testArray) {
         int m = 128;
-        int i = 3;
+        int i = 2;
         int N = testArray.size();
         int M = 77;  // 3 + ( M + 1 ) * 128 = 10,000
 
         // Calculate rho-value
         double sum = 0;
-        int counter = 0;
 
-        for (int k = 0 ; k < M ; k++) {
+        for (int k = 0 ; k <= M; k++) {
             int test1 = i+(k*m);
             int test2 = i+(k+1)*m;
             sum += testArray.get(test1)*testArray.get(test2);
-            counter++;
-
         }
 
-
-        System.out.println("number of loops " + counter);
-
-        double divide = 1.0 /  ((double) M)+1.0;
-        double rho = ((divide) * sum)- 0.25;
-        System.out.println("divide: " +divide);
-        System.out.println("sum:"+ sum);
-        System.out.println("Rho " + rho);
+        double divide = 1.0 / (77+1.0);
+        double rho = divide * sum - 0.25;
 
         // Calculate sigma
-        double testsigma1 = Math.sqrt(13*(double) M+7);
-        double testsigma2 =  12* ((double) M+1);
-        double sigma = testsigma1/ testsigma2;
-        System.out.println("sigma " + sigma);
+        double testsigma1 = Math.sqrt(13* 77+7);
+        double testsigma2 =  12 * (77+1);
+        double sigma = testsigma1 / testsigma2;
 
         // Test statistic (Z_0)
         double Z = rho/sigma;
 
-        System.out.println("Your Z : " + Z);
+        if ( Z > -1.96 && Z < 1.96) {
+            return "H0 NOT Rejected";
+        } else {
+            return "H0 NOT Rejected";
+        }
     }
 
     public static Integer factorial(int n)
@@ -210,7 +175,7 @@ public class Main {
     }
 
 
-    public static void runTest(ArrayList<Double> runArray) {
+    public static String runTest(ArrayList<Double> runArray) {
 
         // The ArrayList that will store the each of the runs and their length
         ArrayList runLengths = new ArrayList();
@@ -282,11 +247,10 @@ public class Main {
         }
 
 
-        System.out.println("chi TOTAL : " + chiValue);
         if (chiValue > 12.592) {
-            System.out.println("H0 Rejected");
+            return "H0 Rejected";
         } else {
-            System.out.println("H0 NOT Rejected");
+            return "H0 NOT Rejected";
         }
     }
 
