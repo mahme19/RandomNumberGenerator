@@ -25,17 +25,17 @@ public class Main {
 
         System.out.println("1st LCG Setting");
 
-        ArrayList<Double> generatedNumbers =  generateNumbers(a,c,m,seed);
+        //ArrayList<Double> generatedNumbers =  generateNumbers(a,c,m,seed);
         //chiSquare(generatedNumbers);
        // KS_test(generatedNumbers);
-        autoCorrelationTest(generatedNumbers);
+       // autoCorrelationTest(generatedNumbers);
 
         //System.out.println("2ND LCG setting");
 
-        //ArrayList<Double> generatedNumbers1 = generateNumbers(a1, c1, m1, seed);
+        ArrayList<Double> generatedNumbers1 = generateNumbers(a1, c1, m1, seed);
         //KS_test(generatedNumbers1);
 
-
+        autoCorrelationTest(generatedNumbers1);
         //System.out.println("Java Random Library");
         //ArrayList<Double> randomGeneratedNumbers = randomNumber();
 
@@ -164,7 +164,7 @@ public class Main {
     public static void autoCorrelationTest(ArrayList<Double> testArray) {
         System.out.println("we started");
         int m = 128;
-        int i = 3;
+        int i = 2;
         int N = testArray.size();
         int M = 77;  // 3 + ( M + 1 ) * 128 = 10,000
 
@@ -172,7 +172,8 @@ public class Main {
         double sum = 0;
         int counter = 0;
 
-        for (int k = 0 ; k < M+1 ; k++) {
+        for (int k = 0 ; k <= M; k++) {
+
             int test1 = i+(k*m);
             int test2 = i+(k+1)*m;
             sum += testArray.get(test1)*testArray.get(test2);
@@ -183,15 +184,15 @@ public class Main {
 
         System.out.println("number of loops " + counter);
 
-        double divide = 1.0 / (77.11+1.0);
+        double divide = 1.0 / (77+1.0);
         double rho = divide * sum - 0.25;
         System.out.println("divide: " +divide);
         System.out.println("sum:"+ sum);
         System.out.println("Rho " + rho);
 
         // Calculate sigma
-        double testsigma1 = Math.sqrt(13* 77.11+7);
-        double testsigma2 =  12 * (77.11+1);
+        double testsigma1 = Math.sqrt(13* 77+7);
+        double testsigma2 =  12 * (77+1);
         double sigma = testsigma1 / testsigma2;
         System.out.println("sigma " + sigma);
 
